@@ -4,6 +4,7 @@
  */
 package assembler.ast;
 
+import assembler.Mneumonic;
 import assembler.H32OutputStream;
 import assembler.SymbolTable;
 import java.util.ArrayList;
@@ -43,9 +44,9 @@ public abstract class ALine {
     public String getOperator() {
         return operator;
     }
-    
-    public void setOperator(String operator){
-       this.operator = operator;
+
+    public void setOperator(String operator) {
+        this.operator = operator;
     }
 
     public int getRelAddr() {
@@ -63,24 +64,24 @@ public abstract class ALine {
     public int getMacSize() {
         return macSize;
     }
-    
-    public void setMacSize(int macSize){
-       this.macSize = macSize;
+
+    public void setMacSize(int macSize) {
+        this.macSize = macSize;
     }
-    
-    public int getNextRelAddr(){
+
+    public int getNextRelAddr() {
         return relAddr + getMacSize();
     }
-    
-    public boolean hasOperands(){
-        return operands.size()>0;
+
+    public boolean hasOperands() {
+        return operands.size() > 0;
     }
 
     public void setRelative(boolean relative) {
         this.relative = relative;
     }
-    
-    public boolean isRelative(){
+
+    public boolean isRelative() {
         return relative;
     }
 
@@ -91,13 +92,13 @@ public abstract class ALine {
         int machineWord = 0;
         if (Mneumonic.getInstance().contains(operator)) {
             machineWord = Mneumonic.getInstance().getOpcode(operator);
-            if( Mneumonic.getInstance().getNumops(operator)>0){
-                for(Operand operand : operands){
+            if (Mneumonic.getInstance().getNumops(operator) > 0) {
+                for (Operand operand : operands) {
                     machineWord += operand.toMac(symtab)[0];
                 }
             }
+            boos.write(machineWord);
         }
-        boos.write(machineWord);
     }
 
     @Override
@@ -108,10 +109,12 @@ public abstract class ALine {
         } else {
             buf.append("        ");
         }
-        buf.append(operator);
-        for (Operand operand : operands) {
-            buf.append(" ");
-            buf.append(operand);
+        if (operator != null) {
+            buf.append(operator);
+            for (Operand operand : operands) {
+                buf.append(" ");
+                buf.append(operand);
+            }
         }
         return buf.toString();
     }

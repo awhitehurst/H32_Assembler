@@ -25,8 +25,11 @@ public class DirectiveEnd extends Directive {
 
     @Override
     public void toHeader(H32OutputStream boos, SymbolTable symtab) {
-        boos.write((byte)'s');
-        boos.write(operands.get(0).toMac(symtab));
+        int word = ((byte)'s' << 24);
+        word += operands.get(0).toMac(symtab)[0];
+        boos.write(word);
+        //boos.write((byte)'s');
+       // boos.write(operands.get(0).toMac(symtab));
     }
     
     @Override

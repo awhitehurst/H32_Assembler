@@ -20,6 +20,18 @@ public class OperandLabel extends Operand {
         super(token);
         this.offset = offset;
     }
+    
+    public int[] toHeader(SymbolTable symtab) {
+        int[] mac = new int[1];
+        if (symtab.contains(token)) {
+            int addr = symtab.getLineNum(token);
+            addr += offset;
+            mac[0] = addr;
+        } else {
+            System.err.println("Undefined label in operand field: " + token);
+        }
+        return mac;
+    }
 
     @Override
     public int[] toMac(SymbolTable symtab) {

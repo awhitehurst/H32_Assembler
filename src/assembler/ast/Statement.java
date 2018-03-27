@@ -26,8 +26,10 @@ public class Statement extends ALine {
                 }
                 boos.write((byte)0);
             } else {
-                boos.write((byte) 'R');
-                boos.write(getRelAddr());
+                // output relative address entries to the header
+                int word = ((byte)'R') << 24;
+                word = word + getRelAddr();
+                boos.write(word);
             }
         }
     }
